@@ -8,8 +8,14 @@
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script>
     $(function() {
-        var counter = 0;
-    	while (! $.get("/newSession/" + prompt("Enter your name"))) {}
+      var userid = prompt("Enter your name.");
+      while(!userid || !$.get("/newSession/" + userid)) {
+        if (userid) {
+          userid = prompt(userid + " is already taken. Please choose another name.");
+        } else {
+          userid = prompt("Enter a username.");
+        }
+      }
     
       $("#where").html("booting...");
       where = "strong-hall";

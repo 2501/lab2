@@ -6,9 +6,16 @@ app.use(cookieParser());
 var twoWeeks = 1209600000;
 
 app.get('/newSession/:userid', function(req, res){
+        var userid = req.params.userid;
 	res.status(200);
-	res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
-	res.send(true);
+        console.log("create userid \"" + userid + "\"");
+        if (userid in inventories) {
+            res.send(false);
+        } else {
+	    res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
+	    res.send(true);
+            inventories[req.params.userid] = ["laptop"];
+        }
 });
 
 app.get('/', function(req, res){
@@ -103,7 +110,7 @@ var dropbox = function(userid, ix,room) {
 	room.what.push(item);
 }
 
-var inventories = {"timbo": ["laptop"]};
+var inventories = {};
 
 var campus =
     [ { "id": "lied-center",
