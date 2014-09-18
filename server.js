@@ -17,10 +17,11 @@ app.get('/', function(req, res){
 });
 
 app.get('/:id', function(req, res){
+        var userid = req.cookies.userid;
 	if (req.params.id == "inventory") {
 	    res.set({'Content-Type': 'application/json'});
 	    res.status(200);
-	    res.send(inventory);
+	    res.send(inventories[userid]);
 	    return;
 	}
 	for (var i in campus) {
@@ -41,6 +42,7 @@ app.get('/images/:name', function(req, res){
 });
 
 app.delete('/:id/:item', function(req, res){
+        var userid = req.cookies.userid;
 	for (var i in campus) {
 		if (req.params.id == campus[i].id) {
 		    res.set({'Content-Type': 'application/json'});
@@ -50,8 +52,8 @@ app.delete('/:id/:item', function(req, res){
 		    }
 		    if (ix >= 0) {
 		       res.status(200);
-			inventory.push(campus[i].what[ix]); // stash
-		        res.send(inventory);
+			inventories[userid].push(campus[i].what[ix]); // stash
+		        res.send(inventories[userid]);
 			campus[i].what.splice(ix, 1); // room no longer has this
 			return;
 		    }
@@ -65,12 +67,13 @@ app.delete('/:id/:item', function(req, res){
 });
 
 app.put('/:id/:item', function(req, res){
+        var userid = req.cookies.userid;
 	for (var i in campus) {
 		if (req.params.id == campus[i].id) {
 				// Check you have this
-				var ix = inventory.indexOf(req.params.item)
+				var ix = inventories[userid].indexOf(req.params.item)
 				if (ix >= 0) {
-					dropbox(ix,campus[i]);
+					dropbox(userid, ix,campus[i]);
 					res.set({'Content-Type': 'application/json'});
 					res.status(200);
 					res.send([]);
@@ -87,9 +90,9 @@ app.put('/:id/:item', function(req, res){
 
 app.listen(3000);
 
-var dropbox = function(ix,room) {
-	var item = inventory[ix];
-	inventory.splice(ix, 1);	 // remove from inventory
+var dropbox = function(userid, ix,room) {
+	var item = inventories[userid][ix];
+	inventories[userid].splice(ix, 1);	 // remove from inventory
 	if (room.id == 'allen-fieldhouse' && item == "basketball") {
 		room.text	+= " Someone found the ball so there is a game going on!"
 		return;
@@ -100,7 +103,7 @@ var dropbox = function(ix,room) {
 	room.what.push(item);
 }
 
-var inventory = ["laptop"];
+var inventories = {"timbo": ["laptop"]};
 
 var campus =
     [ { "id": "lied-center",
