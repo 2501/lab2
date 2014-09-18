@@ -8,8 +8,9 @@
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script>
     $(function() {
-      
-    	while ($.get("/newSession/" + prompt("Enter your name"))) {}
+        var counter = 0;
+    	while (! $.get("/newSession/" + prompt("Enter your name"))) {
+            if (counter == 5) {
     
       $("#where").html("booting...");
       where = "strong-hall";

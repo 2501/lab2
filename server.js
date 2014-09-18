@@ -6,18 +6,13 @@ app.use(cookieParser());
 var twoWeeks = 1209600000;
 
 app.get('/newSession/:userid', function(req, res){
-	console.log("nS ");
 	res.status(200);
 	res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
 	res.send(true);
-	console.log("nsCookies ", req.cookies);
 });
 
 app.get('/', function(req, res){
 	res.status(200);
-	var newUserId;
-	res.cookie("userid","wutname", {maxAge: twoWeeks, httpOnly: false});
-	console.log("Cookies ", req.cookies);
 	res.sendFile(__dirname + "/index.html");
 });
 
