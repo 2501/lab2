@@ -36,6 +36,8 @@ app.get('/:id', function(req, res){
 		    res.set({'Content-Type': 'application/json'});
 		    res.status(200);
 		    res.send(campus[i]);
+                    locations[userid] = campus[i].id;
+                    console.log(locations);
 		    return;
 		}
 	}
@@ -47,6 +49,19 @@ app.get('/images/:name', function(req, res){
 	res.status(200);
 	res.sendFile(__dirname + "/" + req.params.name);
 });
+
+app.get('/neighbors/:id', function(req, res) {
+        var neighbors = [];
+        for (var userid in locations) {
+                if (locations[userid] == req.params.id) {
+                    neighbors += userid;
+                }
+        }
+        res.set({'Content-Type': 'application/json'});
+        res.status(200);
+        res.send(neighbors);
+});
+        
 
 app.delete('/:id/:item', function(req, res){
         var userid = req.cookies.userid;
@@ -111,6 +126,7 @@ var dropbox = function(userid, ix,room) {
 }
 
 var inventories = {};
+var locations = {};
 
 var campus =
     [ { "id": "lied-center",
