@@ -12,6 +12,7 @@ app.get('/newSession/:userid', function(req, res){
         if (userid in inventories) {
             res.send(false);
         } else {
+            res.clearCookie("userid");
 	    res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
 	    res.send(true);
             inventories[req.params.userid] = ["laptop"];
@@ -50,6 +51,7 @@ app.get('/images/:name', function(req, res){
 	res.sendFile(__dirname + "/" + req.params.name);
 });
 
+/*
 app.get('/neighbors/:id', function(req, res) {
         var neighbors = [];
         for (var userid in locations) {
@@ -61,6 +63,7 @@ app.get('/neighbors/:id', function(req, res) {
         res.status(200);
         res.send(neighbors);
 });
+*/
         
 
 app.delete('/:id/:item', function(req, res){
