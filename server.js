@@ -114,8 +114,6 @@ var dropbox = function(userid, ix,room) {
 var inventories = {};
 var locations = {};
 
-location[userid] = "wescoe"
-
 var campus =
     [ { "id": "lied-center",
 	"where": "LiedCenter.jpg",
