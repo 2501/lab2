@@ -51,21 +51,7 @@ app.get('/images/:name', function(req, res){
 	res.sendFile(__dirname + "/" + req.params.name);
 });
 
-/*
-app.get('/neighbors/:id', function(req, res) {
-        var neighbors = [];
-        for (var userid in locations) {
-                if (locations[userid] == req.params.id) {
-                    neighbors += userid;
-                }
-        }
-        res.set({'Content-Type': 'application/json'});
-        res.status(200);
-        res.send(neighbors);
-});
-*/
-
-zapp.delete('/:id/:item', function(req, res){
+app.delete('/:id/:item', function(req, res){
         var userid = req.cookies.userid;
 	for (var i in campus) {
 		if (req.params.id == campus[i].id) {
@@ -134,55 +120,65 @@ var campus =
     [ { "id": "lied-center",
 	"where": "LiedCenter.jpg",
 	"next": {"east": "eaton-hall", "south": "dole-institute"},
-	"text": "You are outside the Lied Center."
+	"text": "You are outside the Lied Center.",
+	"who": []
       },
       { "id": "dole-institute",
 	"where": "DoleInstituteofPolitics.jpg",
 	"next": {"east": "allen-fieldhouse", "north": "lied-center"},
-	"text": "You take in the view of the Dole Institute of Politics. This is the best part of your walk to Nichols Hall."
+	"text": "You take in the view of the Dole Institute of Politics. This is the best part of your walk to Nichols Hall.",
+	"who": []
       },
       { "id": "eaton-hall",
 	"where": "EatonHall.jpg",
 	"next": {"east": "snow-hall", "south": "allen-fieldhouse", "west": "lied-center"},
-	"text": "You are outside Eaton Hall. You should recognize here."
+	"text": "You are outside Eaton Hall. You should recognize here.",
+	"who": []
       },
       { "id": "snow-hall",
 	"where": "SnowHall.jpg",
 	"next": {"east": "strong-hall", "south": "ambler-recreation", "west": "eaton-hall"},
-	"text": "You are outside Snow Hall. Math class? Waiting for the bus?"
+	"text": "You are outside Snow Hall. Math class? Waiting for the bus?",
+	"who": []
       },
       { "id": "strong-hall",
 	"where": "StrongHall.jpg",
 	"next": {"east": "outside-fraser", "north": "memorial-stadium", "west": "snow-hall"},
 	"what": ["coffee"],
-	"text": "You are outside Stong Hall."
+	"text": "You are outside Strong Hall.",
+	"who": []
       },
       { "id": "ambler-recreation",
 	"where": "AmblerRecreation.jpg",
 	"next": {"west": "allen-fieldhouse", "north": "snow-hall"},
-	"text": "It's the starting of the semester, and you feel motivated to be at the Gym. Let's see about that in 3 weeks."
+	"text": "It's the starting of the semester, and you feel motivated to be at the Gym. Let's see about that in 3 weeks.",
+	"who": []
       },
       { "id": "outside-fraser",
   "where": "OutsideFraserHall.jpg",
 	"next": {"west": "strong-hall","north":"spencer-museum"},
 	"what": ["basketball"],
-	"text": "On your walk to the Kansas Union, you wish you had class outside."
+	"text": "On your walk to the Kansas Union, you wish you had class outside.",
+	"who": []
       },
       { "id": "spencer-museum",
 	"where": "SpencerMuseum.jpg",
 	"next": {"south": "outside-fraser","west":"memorial-stadium"},
 	"what": ["art"],
-	"text": "You are at the Spencer Museum of Art."
+	"text": "You are at the Spencer Museum of Art.",
+	"who": []
       },
       { "id": "memorial-stadium",
 	"where": "MemorialStadium.jpg",
 	"next": {"south": "strong-hall","east":"spencer-museum"},
 	"what": ["ku flag"],
-	"text": "Half the crowd is wearing KU Basketball gear at the football game."
+	"text": "Half the crowd is wearing KU Basketball gear at the football game.",
+	"who": []
       },
       { "id": "allen-fieldhouse",
 	"where": "AllenFieldhouse.jpg",
 	"next": {"north": "eaton-hall","east": "ambler-recreation","west": "dole-institute"},
-	"text": "Rock Chalk! You're at the field house."
+	"text": "Rock Chalk! You're at the field house.",
+	"who": []
       }
     ]
