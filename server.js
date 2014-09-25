@@ -2,6 +2,7 @@ var express = require('express');
 var cookieParser = require('cookie-parser');
 var app = express();
 app.use(cookieParser());
+var server = app.listen(3000);
 
 var twoWeeks = 1209600000;
 
@@ -12,7 +13,6 @@ app.get('/newSession/:userid', function(req, res){
         if (userid in inventories) {
             res.send(false);
         } else {
-            res.clearCookie("userid");
 	    res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
 	    res.send(true);
             inventories[req.params.userid] = ["laptop"];
@@ -64,9 +64,8 @@ app.get('/neighbors/:id', function(req, res) {
         res.send(neighbors);
 });
 */
-        
 
-app.delete('/:id/:item', function(req, res){
+zapp.delete('/:id/:item', function(req, res){
         var userid = req.cookies.userid;
 	for (var i in campus) {
 		if (req.params.id == campus[i].id) {
@@ -113,8 +112,6 @@ app.put('/:id/:item', function(req, res){
 	res.send("location not found");
 });
 
-app.listen(3000);
-
 var dropbox = function(userid, ix,room) {
 	var item = inventories[userid][ix];
 	inventories[userid].splice(ix, 1);	 // remove from inventory
@@ -130,6 +127,8 @@ var dropbox = function(userid, ix,room) {
 
 var inventories = {};
 var locations = {};
+
+location[userid] = "wescoe"
 
 var campus =
     [ { "id": "lied-center",
