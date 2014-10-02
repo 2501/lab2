@@ -7,17 +7,17 @@ var server = app.listen(3000);
 var twoWeeks = 1209600000;
 
 app.get('/newSession/:userid', function(req, res){
-        var userid = req.params.userid;
-	res.status(200);
-        console.log("create userid \"" + userid + "\"");
-        if (userid in inventories) {
-            res.send(false);
-        } else {
-	    res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
-	    res.send(true);
-	    createUser();
-            inventories[req.params.userid] = ["laptop"];
-        }
+		var userid = req.params.userid;
+		res.status(200);
+		//console.log?
+		if(userid in users){
+			res.send(false);//
+		}
+		else{
+			res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
+	    	res.send(true);
+	    	createUser(userid);
+		}
 });
 
 app.get('/', function(req, res){
@@ -35,6 +35,9 @@ app.get('/:id', function(req, res){
 	}
 	for (var i in campus) {
 		if (req.params.id == campus[i].id) {
+			exitRoom(userid);
+			users[userid].local = campus[i].id;
+			enterRoom[userid];
 		    res.set({'Content-Type': 'application/json'});
 		    res.status(200);
 		    res.send(campus[i]);
@@ -42,7 +45,10 @@ app.get('/:id', function(req, res){
                     console.log(locations);
 		    return;
 		}
-	}
+	}res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
+	    	res.send(true);
+	    	createUser();
+            inventories[req.params.userid] = ["laptop"];
 	res.status(404);
 	res.send("not found, sorry");
 });
@@ -116,21 +122,13 @@ function createUser(id) {
 	users[id] = {"inventory": ["laptop"], "local": "strong-hall"};
 }
 
-function enterRoom() {
-	for (var i in campus) {
-		if(users[id].local == campus[i].id){
-			campus[i].who.push(id);
-		}
-	}
-}
-
-function exitRoom(id) {
-	for (var i in campus) {
-		if(users[id].local == campus[i].id){
-			var index = campus[i].who.indexOf(id);
-			campus[i].who.splice(index, 1);
-		}
-	}
+function changeLocation(id,place){
+	var currentLocation = users[id].local;
+	var index = campus[currentLocation].who.indexOf(id);
+	campus[currentLocation].who.splice(index, 1);
+	
+	campus[place].who.push(id);
+	users[id].local = place;
 }
 
 var users = {}
