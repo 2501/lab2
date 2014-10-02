@@ -7,16 +7,17 @@ var server = app.listen(3000);
 var twoWeeks = 1209600000;
 
 app.get('/newSession/:userid', function(req, res){
-        var userid = req.params.userid;
-	res.status(200);
-        console.log("create userid \"" + userid + "\"");
-        if (userid in inventories) {
-            res.send(false);
-        } else {
-	    res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
-	    res.send(true);
-            inventories[req.params.userid] = ["laptop"];
-        }
+		var userid = req.params.userid;
+		res.status(200);
+		//console.log?
+		if(userid in users){
+			res.send(false);//
+		}
+		else{
+			res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
+	    	res.send(true);
+	    	createUser(userid);
+		}
 });
 
 app.get('/', function(req, res){
@@ -74,31 +75,29 @@ app.delete('/:id/:item', function(req, res){
 });
 
 app.put('/:id/:item', function(req, res){
-        var userid = req.cookies.userid;
-	for (var i in campus) {
-		if (req.params.id == campus[i].id) {
-				// Check you have this
-				var ix = inventories[userid].indexOf(req.params.item)
-				if (ix >= 0) {
-					dropbox(userid, ix,campus[i]);
-					res.set({'Content-Type': 'application/json'});
-					res.status(200);
-					res.send([]);
-				} else {
-					res.status(404);
-					res.send("you do not have this");
-				}
-				return;
-		}
+    var userid = req.cookies.userid;
+	if (req.params.id == users[userid].local) {
+			// Check you have this
+			var ix = users[userid].inventory.indexOf(req.params.item)
+			if (ix >= 0) {
+				dropbox(user[userid].inventory, ix,campus[req.params.id]);
+				res.set({'Content-Type': 'application/json'});
+				res.status(200);
+				res.send([]);
+			} else {
+				res.status(404);
+				res.send("you do not have this");
+			}
+			return;
 	}
 	res.status(404);
 	res.send("location not found");
 });
 
-var dropbox = function(userid, ix,room) {
-	var item = inventories[userid][ix];
-	inventories[userid].splice(ix, 1);	 // remove from inventory
-	if (room.id == 'allen-fieldhouse' && item == "basketball") {
+var dropbox = function(inventory, ix, room) {
+	var item = inventory[ix];
+	inventory.splice(ix, 1);	 // remove from inventory
+	if (campus.indexOf(room) == 'allen-fieldhouse' && item == "basketball") {
 		room.text	+= " Someone found the ball so there is a game going on!"
 		return;
 	}
@@ -108,8 +107,20 @@ var dropbox = function(userid, ix,room) {
 	room.what.push(item);
 }
 
-var inventories = {};
-var locations = {};
+function createUser(id) {
+	users[id] = {"inventory": ["laptop"], "local": "strong-hall"};
+}
+
+function changeLocation(id,place){
+	var currentLocation = users[id].local;
+	var index = campus[currentLocation].who.indexOf(id);
+	campus[currentLocation].who.splice(index, 1);
+	
+	campus[place].who.push(id);
+	users[id].local = place;
+}
+
+var users = {}
 
 var campus =
     [ { "id": "lied-center",
