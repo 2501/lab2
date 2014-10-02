@@ -84,31 +84,29 @@ app.delete('/:id/:item', function(req, res){
 });
 
 app.put('/:id/:item', function(req, res){
-        var userid = req.cookies.userid;
-	for (var i in campus) {
-		if (req.params.id == campus[i].id) {
-				// Check you have this
-				var ix = inventories[userid].indexOf(req.params.item)
-				if (ix >= 0) {
-					dropbox(userid, ix,campus[i]);
-					res.set({'Content-Type': 'application/json'});
-					res.status(200);
-					res.send([]);
-				} else {
-					res.status(404);
-					res.send("you do not have this");
-				}
-				return;
-		}
+    var userid = req.cookies.userid;
+	if (req.params.id == users[userid].local) {
+			// Check you have this
+			var ix = users[userid].inventory.indexOf(req.params.item)
+			if (ix >= 0) {
+				dropbox(user[userid].inventory, ix,campus[req.params.id]);
+				res.set({'Content-Type': 'application/json'});
+				res.status(200);
+				res.send([]);
+			} else {
+				res.status(404);
+				res.send("you do not have this");
+			}
+			return;
 	}
 	res.status(404);
 	res.send("location not found");
 });
 
-var dropbox = function(userid, ix,room) {
-	var item = inventories[userid][ix];
-	inventories[userid].splice(ix, 1);	 // remove from inventory
-	if (room.id == 'allen-fieldhouse' && item == "basketball") {
+var dropbox = function(inventory, ix, room) {
+	var item = inventory[ix];
+	inventory.splice(ix, 1);	 // remove from inventory
+	if (campus.indexOf(room) == 'allen-fieldhouse' && item == "basketball") {
 		room.text	+= " Someone found the ball so there is a game going on!"
 		return;
 	}
