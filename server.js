@@ -25,22 +25,19 @@ app.get('/', function(req, res){
 });
 
 app.get('/:id', function(req, res){
-        var userid = req.cookies.userid;
+  var userid = req.cookies.userid;
 	if (req.params.id == "inventory") {
 	    res.set({'Content-Type': 'application/json'});
 	    res.status(200);
-	    res.send(inventories[userid]);
+	    res.send(users[userid].inventory);//TODO test!
 	    return;
 	}
-	for (var i in campus) {
-		if (req.params.id == campus[i].id) {
-		    res.set({'Content-Type': 'application/json'});
-		    res.status(200);
-		    res.send(campus[i]);
-                    locations[userid] = campus[i].id;
-                    console.log(locations);
-		    return;
-		}
+	if(req.params.id == users[userid].local){
+		res.set({'Content-Type': 'application/json'});
+    res.status(200);
+    res.send(users[userid]);
+    changeLocation(userid,req.params.id);
+    console.log(users[userid].local);//TODO test!
 	}
 	res.status(404);
 	res.send("not found, sorry");
