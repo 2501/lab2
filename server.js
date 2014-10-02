@@ -7,17 +7,13 @@ var server = app.listen(3000);
 var twoWeeks = 1209600000;
 
 app.get('/newSession/:userid', function(req, res){
-		var userid = req.params.userid;
-		res.status(200);
-		//console.log?
-		if(userid in users){
-			res.send(false);//
-		}
-		else{
-			res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
-	    	res.send(true);
-	    	createUser(userid);
-		}
+	var userid = req.params.userid;
+	res.status(200);
+        if (!(userid in users)) {
+	        createUser(userid);
+        }
+        res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
+	res.send();
 });
 
 app.get('/', function(req, res){
@@ -101,7 +97,10 @@ function createUser(id) {
 }
 
 function changeLocation(id,place){
+        console.log("changing location of user " + id);
+        console.log("user local: " + users[id].local);
 	var currentLocation = users[id].local;
+        console.log("current location: " + users[id].local)
 	var index = campus[currentLocation].who.indexOf(id);
 	campus[currentLocation].who.splice(index, 1);
 	
