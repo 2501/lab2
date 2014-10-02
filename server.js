@@ -56,7 +56,6 @@ app.delete('/:id/:item', function(req, res){
         room = campus.id;
         res.set({'Content-Type': 'application/json'});
         res.status(200);
-        if (room.what == undefined) room.what = [];
         if (id = user.local && item in room.what) {
 	        user.inventory.push(item);
 	        res.send(userid.inventory);
@@ -94,9 +93,6 @@ var dropbox = function(inventory, ix, room) {
 		room.text	+= " Someone found the ball so there is a game going on!"
 		return;
 	}
-	if (room.what == undefined) {
-		room.what = [];
-	}
 	room.what.push(item);
 }
 
@@ -120,25 +116,29 @@ var campus =
 	"where": "LiedCenter.jpg",
 	"next": {"east": "eaton-hall", "south": "dole-institute"},
 	"text": "You are outside the Lied Center.",
-	"who": []
+	"who": [],
+	"what": []
     },
       "dole-institute" : {
 	  "where": "DoleInstituteofPolitics.jpg",
 	  "next": {"east": "allen-fieldhouse", "north": "lied-center"},
 	  "text": "You take in the view of the Dole Institute of Politics. This is the best part of your walk to Nichols Hall.",
-	  "who": []
+	  "who": [],
+	  "what": []
       },
       "eaton-hall" : {
 	  "where": "EatonHall.jpg",
 	  "next": {"east": "snow-hall", "south": "allen-fieldhouse", "west": "lied-center"},
 	  "text": "You are outside Eaton Hall. You should recognize here.",
-	  "who": []
+	  "who": [],
+	  "what": []
       },
       "snow-hall" : {
 	  "where": "SnowHall.jpg",
 	  "next": {"east": "strong-hall", "south": "ambler-recreation", "west": "eaton-hall"},
 	  "text": "You are outside Snow Hall. Math class? Waiting for the bus?",
-	  "who": []
+	  "who": [],
+	  "what": []
       },
       "strong-hall" : {
 	  "where": "StrongHall.jpg",
@@ -151,7 +151,8 @@ var campus =
 	  "where": "AmblerRecreation.jpg",
 	  "next": {"west": "allen-fieldhouse", "north": "snow-hall"},
 	  "text": "It's the starting of the semester, and you feel motivated to be at the Gym. Let's see about that in 3 weeks.",
-	  "who": []
+	  "who": [],
+	  "what": []
       },
       "outside-fraser" : {
 	  "where": "OutsideFraserHall.jpg",
@@ -178,6 +179,7 @@ var campus =
 	  "where": "AllenFieldhouse.jpg",
 	  "next": {"north": "eaton-hall","east": "ambler-recreation","west": "dole-institute"},
 	  "text": "Rock Chalk! You're at the field house.",
-	  "who": []
+	  "who": [],
+	  "what": []
       }
     };
