@@ -15,6 +15,7 @@ app.get('/newSession/:userid', function(req, res){
         } else {
 	    res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
 	    res.send(true);
+	    createUser();
             inventories[req.params.userid] = ["laptop"];
         }
 });
@@ -111,8 +112,28 @@ var dropbox = function(userid, ix,room) {
 	room.what.push(item);
 }
 
-var inventories = {};
-var locations = {};
+function createUser(id) {
+	users[id] = {"inventory": ["laptop"], "local": "strong-hall"};
+}
+
+function enterRoom() {
+	for (var i in campus) {
+		if(users[id].local == campus[i].id){
+			campus[i].who.push(id);
+		}
+	}
+}
+
+function exitRoom(id) {
+	for (var i in campus) {
+		if(users[id].local == campus[i].id){
+			var index = campus[i].who.indexOf(id);
+			campus[i].who.splice(index, 1);
+		}
+	}
+}
+
+var users = {}
 
 var campus =
     [ { "id": "lied-center",
