@@ -33,7 +33,7 @@ app.get('/:id', function(req, res){
 	    res.send(users[userid].inventory);//TODO test!
 	    return;
 	}
-	if(req.params.id == users[userid].local){
+	if(campus[req.params.id] != undefined){
 		res.set({'Content-Type': 'application/json'});
     res.status(200);
     res.send(campus[req.params.id]);
