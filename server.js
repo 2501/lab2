@@ -36,7 +36,7 @@ app.get('/:id', function(req, res){
 	if(req.params.id == users[userid].local){
 		res.set({'Content-Type': 'application/json'});
     res.status(200);
-    res.send(campus.id);
+    res.send(campus[req.params.id]);
     changeLocation(userid,req.params.id);
     console.log(users[userid].local);//TODO test!
     return;
@@ -70,18 +70,18 @@ app.delete('/:id/:item', function(req, res){
 app.put('/:id/:item', function(req, res){
     var userid = req.cookies.userid;
 	if (req.params.id == users[userid].local) {
-			// Check you have this
-			var ix = users[userid].inventory.indexOf(req.params.item)
-			if (ix >= 0) {
-				dropbox(user[userid].inventory, ix,campus[req.params.id]);
-				res.set({'Content-Type': 'application/json'});
-				res.status(200);
-				res.send([]);
-			} else {
-				res.status(404);
-				res.send("you do not have this");
-			}
-			return;
+		// Check you have this
+		var ix = users[userid].inventory.indexOf(req.params.item)
+		if (ix >= 0) {
+			dropbox(user[userid].inventory, ix,campus[req.params.id]);
+			res.set({'Content-Type': 'application/json'});
+			res.status(200);
+			res.send([]);
+		} else {
+			res.status(404);
+			res.send("you do not have this");
+		}
+		return;
 	}
 	res.status(404);
 	res.send("location not found");
