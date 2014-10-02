@@ -36,7 +36,7 @@ app.get('/:id', function(req, res){
 	if(req.params.id == users[userid].local){
 		res.set({'Content-Type': 'application/json'});
     res.status(200);
-    res.send(users[userid]);
+    res.send(campus.id);
     changeLocation(userid,req.params.id);
     console.log(users[userid].local);//TODO test!
     return;
