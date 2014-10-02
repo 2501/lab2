@@ -39,6 +39,7 @@ app.get('/:id', function(req, res){
     res.send(users[userid]);
     changeLocation(userid,req.params.id);
     console.log(users[userid].local);//TODO test!
+    return;
 	}
 	res.status(404);
 	res.send("not found, sorry");
@@ -51,7 +52,7 @@ app.get('/images/:name', function(req, res){
 
 app.delete('/:id/:item', function(req, res){
         var userid = req.cookies.userid;
-        user = users.userid;
+        user = users[userid];
         room = campus.id;
         res.set({'Content-Type': 'application/json'});
         res.status(200);
