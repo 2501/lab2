@@ -49,26 +49,30 @@ app.get('/images/:name', function(req, res){
 app.delete('/:id/:item', function(req, res){
         var userid = req.cookies.userid;
         user = users[userid];
-        room = campus.id;
+        room = campus[req.params.id];
         res.set({'Content-Type': 'application/json'});
         res.status(200);
-        if (id = user.local && item in room.what) {
-	        user.inventory.push(item);
-	        res.send(userid.inventory);
-	        delete room.what[item];
+        
+        var ix = campus[req.params.id].what.indexOf(req.params.item);
+        
+        if ( (req.params.id == user.local) && (ix >= 0) ) {
+        	user.inventory.push(campus[req.params.id].what[ix]);
+        	res.send(user.inventory);
+        	campus[req.params.id].what.splice(ix,1);
 	        return;
         }
+
         res.send([]);
         return;
 });
-        
+
 app.put('/:id/:item', function(req, res){
-    var userid = req.cookies.userid;
+  var userid = req.cookies.userid;
 	if (req.params.id == users[userid].local) {
 		// Check you have this
 		var ix = users[userid].inventory.indexOf(req.params.item)
 		if (ix >= 0) {
-			dropbox(user[userid].inventory, ix,campus[req.params.id]);
+			dropbox(users[userid].inventory, ix,req.params.id);
 			res.set({'Content-Type': 'application/json'});
 			res.status(200);
 			res.send([]);
@@ -85,11 +89,11 @@ app.put('/:id/:item', function(req, res){
 var dropbox = function(inventory, ix, room) {
 	var item = inventory[ix];
 	inventory.splice(ix, 1);	 // remove from inventory
-	if (campus.indexOf(room) == 'allen-fieldhouse' && item == "basketball") {
-		room.text	+= " Someone found the ball so there is a game going on!"
+	if ( (room == 'allen-fieldhouse') && (item == "basketball") ) {
+		campus[room].text	+= " Someone found the ball so there is a game going on!"
 		return;
 	}
-	room.what.push(item);
+	campus[room].what.push(item);
 }
 
 function createUser(id) {
@@ -97,10 +101,10 @@ function createUser(id) {
 }
 
 function changeLocation(id,place){
-        console.log("changing location of user " + id);
-        console.log("user local: " + users[id].local);
+	console.log("changing location of user " + id);
+	console.log("user local: " + users[id].local);
 	var currentLocation = users[id].local;
-        console.log("current location: " + users[id].local)
+  console.log("current location: " + users[id].local);
 	var index = campus[currentLocation].who.indexOf(id);
 	campus[currentLocation].who.splice(index, 1);
 	
