@@ -10,7 +10,7 @@ app.get('/newSession/:userid', function(req, res){
 	var userid = req.params.userid;
 	res.status(200);
         if (!(userid in users)) {
-	        createUser(userid);
+	        createUser(userid); // Don't TODO: any database changes will happen inside createUser
         }
         res.cookie("userid",req.params.userid, {maxAge: twoWeeks, httpOnly: false});
 	res.send();
@@ -26,21 +26,22 @@ app.get('/:id', function(req, res){
 	if (req.params.id == "inventory") {
 	    res.set({'Content-Type': 'application/json'});
 	    res.status(200);
-	    res.send(users[userid].inventory);//TODO test!
+	    res.send(users[userid].inventory); // TODO: get inventory from database
 	    return;
 	}
 	if(campus[req.params.id] != undefined){
 		res.set({'Content-Type': 'application/json'});
     res.status(200);
+    // TODO: return room info from database
     res.send(campus[req.params.id]);
     changeLocation(userid,req.params.id);
-    console.log(users[userid].local);//TODO test!
     return;
 	}
 	res.status(404);
 	res.send("not found, sorry");
 });
 
+// Maybe TODO: Probably not? 
 app.get('/images/:name', function(req, res){
 	res.status(200);
 	res.sendFile(__dirname + "/" + req.params.name);
@@ -53,8 +54,14 @@ app.delete('/:id/:item', function(req, res){
         res.set({'Content-Type': 'application/json'});
         res.status(200);
         
+        // TODO: get user location from database
+        // TODO: if id = user location and (item in location in database):
+        //           put item in user inventory in database
+        //           remove item from location in database
+        //           return user inventory from database
+
         var ix = campus[req.params.id].what.indexOf(req.params.item);
-        
+
         if ( (req.params.id == user.local) && (ix >= 0) ) {
         	user.inventory.push(campus[req.params.id].what[ix]);
         	res.send(user.inventory);
@@ -68,10 +75,13 @@ app.delete('/:id/:item', function(req, res){
 
 app.put('/:id/:item', function(req, res){
   var userid = req.cookies.userid;
+        // TODO: Check if room id is user location in database
 	if (req.params.id == users[userid].local) {
 		// Check you have this
+                // TODO: check if item is in user inventory in database
 		var ix = users[userid].inventory.indexOf(req.params.item)
 		if (ix >= 0) {
+                        // TODO: change parameters if necessary to work with database
 			dropbox(users[userid].inventory, ix,req.params.id);
 			res.set({'Content-Type': 'application/json'});
 			res.status(200);
@@ -87,16 +97,23 @@ app.put('/:id/:item', function(req, res){
 });
 
 var dropbox = function(inventory, ix, room) {
+        // TODO: remove item from inventory in database
 	var item = inventory[ix];
 	inventory.splice(ix, 1);	 // remove from inventory
+
+        
 	if ( (room == 'allen-fieldhouse') && (item == "basketball") ) {
+	        // TODO: edit room text in inventory
 		campus[room].text	+= " Someone found the ball so there is a game going on!"
 		return;
 	}
+
+        // TODO: put item in room in database
 	campus[room].what.push(item);
 }
 
 function createUser(id) {
+        // TODO: create user in database
 	users[id] = {"inventory": ["laptop"], "local": "strong-hall"};
 }
 
@@ -106,9 +123,12 @@ function changeLocation(id,place){
 	var currentLocation = users[id].local;
   console.log("current location: " + users[id].local);
 	var index = campus[currentLocation].who.indexOf(id);
+        // TODO: remove user from oldLocation.who on database
 	campus[currentLocation].who.splice(index, 1);
 	
+        // TODO: Add user to newLocation.who on database
 	campus[place].who.push(id);
+        // TODO: Change user location on database
 	users[id].local = place;
 }
 
