@@ -1,5 +1,5 @@
 <html>
-  <body>
+ <body>
   <font size=4><div id="where"></div></font>
   <img id="picture" src="">
   <font size=3><div id="what"></div></font>
@@ -47,6 +47,13 @@
                 $("#what").append(button);
               }
           }
+
+          $("#who").html("You can see ");
+          for(var i in data.who) {
+            $("who").append(data.who[i]);
+          }
+          $("#who").append(" here.");
+
 
           $("#next").html("");
           for(var i in data.next) {
