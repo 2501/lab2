@@ -6,6 +6,7 @@
   <font size=3><div id="who"></div></font>
   <font size=3><div id="inventory"></div></font>
   <font size=3><div id="next"></div></font>
+  <font size=3><div id="save"></div></font>
   <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
   <script>
     $(function() {
@@ -101,9 +102,16 @@
           }
         });
       }
+      
+      function save() {
+	      $("#save").html("Saving");
+	      $.save();
+	      $("#save").html("");
+      }
 
       refresh();
       setInterval(function() {refresh();}, 2000);
+      setInterval(function() {save();}, 10000);
 
     });
   </script>
