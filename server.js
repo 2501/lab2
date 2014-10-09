@@ -18,9 +18,6 @@ app.get('/newSession/:userid', function(req, res){
 });
 
 app.get('/', function(req, res){
-	res.on("close", function(err) {
-		console.log("closing");
-	}
 	res.status(200);
 	res.sendFile(__dirname + "/index.html");
 });
@@ -41,7 +38,6 @@ app.get('/:id', function(req, res){
 	changeLocation(userid,req.params.id);
     }
     res.send(campus[req.params.id]);
-    console.log(campus[req.params.id].who);
     return;
 	}
 	res.status(404);
@@ -125,10 +121,7 @@ function createUser(id) {
 }
 
 function changeLocation(id,place){
-	console.log("changing location of user " + id);
-	console.log("user local: " + users[id].local);
 	var currentLocation = users[id].local;
-        console.log("current location: " + users[id].local);
 	var index = campus[currentLocation].who.indexOf(id);
   // TODO: remove user from oldLocation.who on database
 	campus[currentLocation].who.splice(index, 1);
