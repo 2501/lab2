@@ -48,17 +48,28 @@
               }
           }
 
-          if (data.who.length == 1) {
+          // Print who is in the same room:
+
+          // remove current user from list
+          var index = data.who.indexOf(userid);
+          data.who.splice(index, 1);
+
+          $("#who").html("");
+          if (data.who.length == 0) {
               $("#who").html("Nobody is here.");
+          } else if (data.who.length == 1) {
+              $("#who").html("You can see " + data.who[0] + " here.");
           } else {
               $("#who").html("You can see ");
-              for(var i in data.who) {
-                $("#who").append(data.who[i]);
+              for (index = 0; index < data.who.length - 2; index++) {
+                  $("#who").append(data.who[index] + ", ");
               }
-              $("#who").append(" here.");
+              $("#who").append(data.who[data.who.length - 2])
+              if (data.who.length > 2) $("#who").append(", ")
+              $("#who").append(" and " + data.who[data.who.length - 1] + " here.");
           }
 
-
+          // Add buttons to navigate to other rooms
           $("#next").html("");
           for(var i in data.next) {
             $("#next").append(i);
