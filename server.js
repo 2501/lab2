@@ -18,9 +18,6 @@ app.get('/newSession/:userid', function(req, res){
 });
 
 app.get('/', function(req, res){
-	res.on("close", function(err) {
-		console.log("closing");
-	}
 	res.status(200);
 	res.sendFile(__dirname + "/index.html");
 });
