@@ -48,11 +48,15 @@
               }
           }
 
-          $("#who").html("You can see ");
-          for(var i in data.who) {
-            $("who").append(data.who[i]);
+          if (data.who.length == 1) {
+              $("#who").html("Nobody is here.");
+          } else {
+              $("#who").html("You can see ");
+              for(var i in data.who) {
+                $("#who").append(data.who[i]);
+              }
+              $("#who").append(" here.");
           }
-          $("#who").append(" here.");
 
 
           $("#next").html("");

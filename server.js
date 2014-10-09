@@ -34,8 +34,10 @@ app.get('/:id', function(req, res){
 		res.set({'Content-Type': 'application/json'});
     res.status(200);
     // TODO: return room info from database
+    if (req.params.id != users[userid].local) {
+	changeLocation(userid,req.params.id);
+    }
     res.send(campus[req.params.id]);
-    changeLocation(userid,req.params.id);
     console.log(campus[req.params.id].who);
     return;
 	}
@@ -116,6 +118,7 @@ var dropbox = function(inventory, ix, room) {
 function createUser(id) {
   // TODO: create user in database
 	users[id] = {"inventory": ["laptop"], "local": "strong-hall"};
+        campus["strong-hall"].who.push(id);
 }
 
 function changeLocation(id,place){
